@@ -1,0 +1,26 @@
+extends layout.pug
+
+block content
+    h1 Ciccasti #{query}
+    div.panel.panel-default
+        table.table.table-condensed
+            tr
+                th Torrent
+                th Magnet
+                th Score
+                th Categoria
+                th Titolo
+        
+            each hit in hits
+                tr
+                    td
+                        a.btn.btn-success.btn-xs.glyphicon.glyphicon-save(href=hit._source.tlink)
+                    td
+                        a.btn.btn-danger.btn-xs.glyphicon.glyphicon-magnet(href=hit._source.mlink)
+                    td
+                        = hit._score
+                    td
+                        = hit._source.cat
+                    td
+                        = hit._source.title
+        
