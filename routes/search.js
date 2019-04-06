@@ -12,7 +12,8 @@ function formatModel(hit) {
         info_hash: hit._source.info_hash,
         length: hit._source.parsed ? hit._source.parsed.length : undefined,
         created: hit._source.parsed ? new Date(hit._source.parsed.created) : undefined,
-        comment: hit._source.parsed ? hit._source.parsed.comment : undefined
+        comment: hit._source.parsed ? hit._source.parsed.comment : undefined,
+        nfiles: hit._source.parsed ? hit._source.parsed.files.length : undefined
     }
 }
 

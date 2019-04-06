@@ -47,9 +47,10 @@ block content
         div
           a(href=model.mlink style="color: #006621")=model.mlink.substring(0, 60)+"..."
 
-        div Hash: #{model.info_hash}
         div Data di creazione: #{created_str}
         div Dimensione: #{size_str}
+        - if (model.nfiles)
+            div Numero files: #{model.nfiles}
         - if (model.comment)
             - let comment = model.comment.length > 50 ? model.comment.substring(0, 47)+"..." : model.comment
             div Commento: #{comment}
