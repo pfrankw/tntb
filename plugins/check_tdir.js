@@ -1,35 +1,32 @@
 const elasticsearch = require('elasticsearch')
+const parseTorrent = require('parse-torrent')
 const fs = require('fs')
+const path = require('path')
 
 let ihs = []
 
-function bulkUpdate(client, index) {
-
-    let my_ihs = ihs.splice(0, 1000)
+async function updateBulk(client, index, ihs)
+{
+    let my_ihs = ihs
     let bulkup = []
 
-    my_ihs.forEach((ih) => {
-        bulkup.push({ update: { _index: index, _type: 'default', _id: ih } })
-        bulkup.push({ doc: {tfile: true} })
+    await my_ihs.forEach(async (ih) => {
+        bulkup.push({ update: { _index: index, _type: 'default', _id: ih.infoHash } })
+        delete ih.infoHash
+        bulkup.push({ doc: { parsed: ih } })
     })
 
-    client.bulk({ body: bulkup }, (err, res, resp) => {
+    try {
+      let x = await client.bulk({body: bulkup})
+      return x
+    } catch (e) {
+      console.error(e)
+    }
 
-        if (err) {
-            console.error(err)
-            process.exit(-1)
-        }
-
-        if (ihs.length)
-            bulkUpdate(client, index)
-        else
-            console.log("[check_tdir]: Ended updating")
-    })
-
-    //console.log(my_ihs)
+    return null
 }
 
-function entry(obj) {
+async function entry(obj) {
 
     let tdir = obj.config.tdir
     let es_host = obj.config.es
@@ -45,18 +42,51 @@ function entry(obj) {
         ]
     })
 
-    files.forEach((file) => {
+    //await files.forEach(async (file, i) => {
+    for (i in files) {
+
+        let file = files[i]
+
+        if (file[0] == '.')
+            continue;
+
+
         let m = file.match(/([A-Z0-9]+)\./)
+        let ih = {}
+        let fullpath = path.join(tdir, file)
+        let torrent
 
         if (!m || !m[1])
-            return;
+            continue;
 
-        ihs.push(m[1])
-    })
+        torrent = parseTorrent(fs.readFileSync(fullpath))
 
-    console.log("[check_tdir]: Updating", ihs.length, "documents")
+        ih = {
+          infoHash: m[1],
+          name: torrent.name,
+          trackers: torrent.announce,
+          comment: torrent.comment,
+          created: torrent.created,
+          private: torrent.private,
+          length: torrent.length,
+          pieceLength: torrent.pieceLength,
+          lastPieceLength: torrent.lastPieceLength,
+          files: torrent.files,
+        }
 
-    bulkUpdate(client, index)
+
+        ihs.push(ih)
+        if (ihs.length >= 1000) {
+          console.log("Updating..", i)
+          await updateBulk(client, index, ihs.splice(0, 1000))
+          console.log("Updated")
+        }
+
+    }
+
+    console.log("Last update", ihs.length)
+    await updateBulk(client, index, ihs.splice(0, 1000))
+    console.log("Updated")
 
 }
 

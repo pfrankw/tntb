@@ -22,10 +22,12 @@ function loadPlugins(app, config, dir) {
     })
 }
 
+console.log("Starting, NODE_ENV =", process.env.NODE_ENV)
 
 let app = require('./app.js')
 let config
 
+console.log("Reading the config")
 try {
     config = YAML.parse(fs.readFileSync('./config.yml').toString())
 } catch (e) {
@@ -33,6 +35,8 @@ try {
     process.exit(-1)
 }
 
+
+console.log("Loading plugins")
 loadPlugins(app, config, path.join(__dirname, 'plugins'))
 
 const esclient = elasticsearch.Client({

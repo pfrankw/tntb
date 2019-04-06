@@ -1,11 +1,22 @@
 doctype html
-html
+html(lang="it")
     head
-        title TNT Browser
+        title Tanto
         link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous")
-        style
-            | .col-center { text-align: center }
+        link(rel="stylesheet" href="/style.css")
+        meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
     body
-        div.container
+        div#page-container
             block content
+            br
+            br
+            br
+            div#footer
+                nav.navbar.navbar-default
+                    div.container-fluid
+                        
+                            ul.nav.navbar-nav
+                                li
+                                    a(href="javascript:alert('FOCCO?????')") About
+        script(src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous")
         script(src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous")

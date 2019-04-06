@@ -1,26 +1,55 @@
 extends layout.pug
 
+
 block content
-    h1 Ciccasti #{query}
-    div.panel.panel-default
-        table.table.table-condensed
-            tr
-                th Torrent
-                th Magnet
-                th Score
-                th Categoria
-                th Titolo
-        
-            each hit in hits
-                tr
-                    td
-                        a.btn.btn-success.btn-xs.glyphicon.glyphicon-save(href=hit._source.tlink)
-                    td
-                        a.btn.btn-danger.btn-xs.glyphicon.glyphicon-magnet(href=hit._source.mlink)
-                    td
-                        = hit._score
-                    td
-                        = hit._source.cat
-                    td
-                        = hit._source.title
-        
+
+  nav.navbar.navbar-default
+    div.container-fluid
+      div.navbar-header
+        button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false")
+          span.sr-only Toggle Navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href="/") Tanto
+      div.collapse.navbar-collapse#navbar
+        form(action="/search" method="GET").navbar-form.navbar-left
+          div.form-group
+            input.form-control(type="text" style="width: 400px" value=query name="q")
+          | &nbsp;
+          button(type="submit").btn.btn-default Cerca
+  div.container-fluid.container-search
+    div(style="padding-bottom: 20px") #{nhits} risultati per la query "#{query}"
+    
+    each model in collection
+      - 
+        let size_str
+        let size = model.length
+        if (size > 1000000000)
+            size_str = (size/1000000000).toFixed(2)+" GB"
+        else if (size > 1000000)
+            size_str = (size/1000000).toFixed(2)+" MB"
+        else if (size > 1000)
+            size_str = (size/1000).toFixed(2)+" KB"
+        else
+            size_str = size+" bytes"
+      
+      - let created = model.created
+      -
+        let created_str = ('0' + created.getDate()).slice(-2) + '/'
+             + ('0' + (created.getMonth()+1)).slice(-2) + '/'
+             + created.getFullYear();
+            
+      div(style="padding-bottom: 20px")
+        div
+          a(href="/torrent/"+model.info_hash)
+            h4(style="font-weight: normal; color: #1a0dac; margin-bottom: 0px")=model.title
+        div
+          a(href=model.mlink style="color: #006621")=model.mlink.substring(0, 60)+"..."
+
+        div Hash: #{model.info_hash}
+        div Data di creazione: #{created_str}
+        div Dimensione: #{size_str}
+        - if (model.comment)
+            - let comment = model.comment.length > 50 ? model.comment.substring(0, 47)+"..." : model.comment
+            div Commento: #{comment}

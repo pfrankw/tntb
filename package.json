@@ -13,6 +13,7 @@
     "elasticsearch": "^15.4.1",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
+    "parse-torrent": "^6.1.2",
     "pug": "^2.0.3",
     "yaml": "^1.4.0"
   }
