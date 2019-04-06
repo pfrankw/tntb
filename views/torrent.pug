@@ -6,9 +6,8 @@ block content
         div.container-fluid
             div.navbar-header
                 a.navbar-brand(href="/") Tanto
-            p.navbar-text
-                b=model.title
+            p.navbar-text=model.info_hash
 
     div.container-fluid.container-search
-        h3 Info
+        h3.fw-normal=model.title
         
