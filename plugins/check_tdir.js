@@ -11,7 +11,7 @@ async function updateBulk(client, index, ihs)
     let bulkup = []
 
     await my_ihs.forEach(async (ih) => {
-        bulkup.push({ update: { _index: index, _type: 'default', _id: ih.infoHash } })
+        bulkup.push({ update: { _index: index, _type: '_doc', _id: ih.infoHash } })
         delete ih.infoHash
         bulkup.push({ doc: { parsed: ih } })
     })
@@ -73,7 +73,6 @@ async function entry(obj) {
           lastPieceLength: torrent.lastPieceLength,
           files: torrent.files,
         }
-
 
         ihs.push(ih)
         if (ihs.length >= 1000) {

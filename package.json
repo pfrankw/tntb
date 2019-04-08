@@ -10,11 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.3",
     "elasticsearch": "^15.4.1",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
     "parse-torrent": "^6.1.2",
     "pug": "^2.0.3",
+    "randomstring": "^1.1.5",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "socks5-http-client": "^1.0.4",
     "yaml": "^1.4.0"
   }
 }

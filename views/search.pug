@@ -33,24 +33,28 @@ block content
             size_str = (size/1000).toFixed(2)+" KB"
         else
             size_str = size+" bytes"
-      
-      - let created = model.created
-      -
-        let created_str = ('0' + created.getDate()).slice(-2) + '/'
-             + ('0' + (created.getMonth()+1)).slice(-2) + '/'
-             + created.getFullYear();
+
             
       div(style="padding-bottom: 20px")
         div
           a(href="/torrent/"+model.info_hash)
-            h4(style="font-weight: normal; color: #1a0dac; margin-bottom: 0px")=model.title
+            h4.fw-normal(style="color: #333eae; margin-bottom: 0px")=model.title
         div
-          a(href=model.mlink style="color: #006621")=model.mlink.substring(0, 60)+"..."
+          a(href=model.link style="color: #006621")=model.link
 
-        div Data di creazione: #{created_str}
+        - if (model.created)
+          - let created = model.created
+          -
+            let created_str = ('0' + created.getDate()).slice(-2) + '/'
+               + ('0' + (created.getMonth()+1)).slice(-2) + '/'
+               + created.getFullYear();
+          div Data di creazione: #{created_str}
+
         div Dimensione: #{size_str}
+
         - if (model.nfiles)
             div Numero files: #{model.nfiles}
+
         - if (model.comment)
             - let comment = model.comment.length > 50 ? model.comment.substring(0, 47)+"..." : model.comment
             div Commento: #{comment}

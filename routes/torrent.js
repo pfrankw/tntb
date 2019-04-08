@@ -10,7 +10,7 @@ router.get('/:hash', async (req, res) => {
     const esclient = req.app.get('esclient')
 
     try {
-        let r = await esclient.get({id: req.params.hash, index: cfg.es_index, type: 'default'})
+        let r = await esclient.get({id: req.params.hash, index: cfg.es_index, type: '_doc'})
         console.log(r)
         res.render('torrent', {model: formatModel(r)})
     } catch (e) {

@@ -1,0 +1,47 @@
+PUT torrents?include_type_name=false
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "ngram3": {
+          "tokenizer": "ngram3_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "ngram3_tokenizer": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 3,
+          "token_chars": [
+            "letter",
+            "digit"
+          ],
+          "filter": "lowercase"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "fields": {
+          "n3": {
+            "type": "text",
+            "analyzer": "ngram3"
+          }
+        }
+      }
+    }
+  }
+}
+
+PUT torrents?include_type_name=false
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+  }
+}
