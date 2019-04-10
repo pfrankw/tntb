@@ -26,6 +26,7 @@ router.get('/', (req, res) => {
 
     esclient.search({
         index: cfg.es_index,
+        type: "_doc",
         body: {
           multi_match: {
             query: req.query.q,
