@@ -26,7 +26,12 @@ router.get('/', (req, res) => {
 
     esclient.search({
         index: cfg.es_index,
-        q: 'title:'+req.query.q
+        body: {
+          multi_match: {
+            query: req.query.q,
+            fields: ["title", "seasons", "episodes"]
+          }
+        }
     }, (err, r, resp) => {
 
         let hits = []
