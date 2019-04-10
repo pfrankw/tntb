@@ -10,6 +10,8 @@ function formatModel(hit) {
         tlink: hit._source.tlink,
         mlink: hit._source.mlink,
         info_hash: hit._source.info_hash,
+        seasons: hit._source.seasons,
+        episodes: hit._source.episodes,
         length: hit._source.parsed ? hit._source.parsed.length : undefined,
         created: hit._source.parsed ? new Date(hit._source.parsed.created) : undefined,
         comment: hit._source.parsed ? hit._source.parsed.comment : undefined,
@@ -38,7 +40,6 @@ router.get('/', (req, res) => {
           hits.forEach((hit)=>{collection.push(formatModel(hit))})
         }
 
-        console.log(collection)
         res.render("search", {query: req.query.q, collection:collection, nhits: nhits})
     })
 

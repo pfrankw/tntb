@@ -64,7 +64,7 @@ async function entry(obj) {
         ih = {
           infoHash: m[1],
           name: torrent.name,
-          trackers: torrent.announce,
+          announce: torrent.announce,
           comment: torrent.comment,
           created: torrent.created,
           private: torrent.private,

@@ -3,7 +3,7 @@ extends layout.pug
 
 block content
 
-  nav.navbar.navbar-default
+  nav.navbar.navbar-default.navbar-fixed-top
     div.container-fluid
       div.navbar-header
         button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false")
@@ -18,30 +18,36 @@ block content
             input.form-control(type="text" style="width: 400px" value=query name="q")
           | &nbsp;
           button(type="submit").btn.btn-default Cerca
-  div.container-fluid.container-search
-    div(style="padding-bottom: 20px") #{nhits} risultati per la query "#{query}"
+  div.container-fluid.container-search(style="padding-top: 60px")
+    div(style="padding-bottom: 20px") #{nhits} risultati per "#{query}"
     
     each model in collection
-      - 
-        let size_str
-        let size = model.length
-        if (size > 1000000000)
-            size_str = (size/1000000000).toFixed(2)+" GB"
-        else if (size > 1000000)
-            size_str = (size/1000000).toFixed(2)+" MB"
-        else if (size > 1000)
-            size_str = (size/1000).toFixed(2)+" KB"
-        else
-            size_str = size+" bytes"
 
             
-      div(style="padding-bottom: 20px")
+      div(style="margin-bottom: 20px")
+        
         div
+          a(href=model.mlink style="color: #e30000")
+            i.fas.fa-magnet
+          | &nbsp;
+          a(href=model.tlink style="color: #009000")
+            i.fas.fa-download
+          | &nbsp;
           a(href="/torrent/"+model.info_hash)
-            h4.fw-normal(style="color: #333eae; margin-bottom: 0px")=model.title
+            h4.fw-normal(style="color: #333eae; margin-bottom: 0px; display: inline")=model.title
+              
         div
           a(href=model.link style="color: #006621")=model.link
+        
+        //-
+          div Magnet: 
+            a(href=model.mlink style="color: #e30000")
+              i.fas.fa-magnet
 
+          div Torrent: 
+            a(href=model.tlink style="color: #009000")
+              i.fas.fa-download
+          
         - if (model.created)
           - let created = model.created
           -
@@ -49,11 +55,21 @@ block content
                + ('0' + (created.getMonth()+1)).slice(-2) + '/'
                + created.getFullYear();
           div Data di creazione: #{created_str}
+          
+          - if (model.length)
+            - 
+              let size_str
+              let size = model.length
+              if (size > 1000000000)
+                  size_str = (size/1000000000).toFixed(2)+" GB"
+              else if (size > 1000000)
+                  size_str = (size/1000000).toFixed(2)+" MB"
+              else if (size > 1000)
+                  size_str = (size/1000).toFixed(2)+" KB"
+              else
+                  size_str = size+" bytes"
 
-        div Dimensione: #{size_str}
-
-        - if (model.nfiles)
-            div Numero files: #{model.nfiles}
+            div Dimensione: #{size_str} / #{model.nfiles} files
 
         - if (model.comment)
             - let comment = model.comment.length > 50 ? model.comment.substring(0, 47)+"..." : model.comment

@@ -17,6 +17,11 @@ function loadPlugins(app, config, dir) {
             return;
 
         fullpath = path.join(dir, file)
+
+        if (fs.lstatSync(fullpath).isDirectory())
+          return
+
+
         require(fullpath)({app: app, config: config})
 
     })
@@ -35,10 +40,6 @@ try {
     process.exit(-1)
 }
 
-
-console.log("Loading plugins")
-loadPlugins(app, config, path.join(__dirname, 'plugins'))
-
 const esclient = elasticsearch.Client({
     hosts: [
         config.es
@@ -47,6 +48,11 @@ const esclient = elasticsearch.Client({
 
 app.set('config', config)
 app.set('esclient', esclient)
+
+
+console.log("Loading plugins")
+loadPlugins(app, config, path.join(__dirname, 'plugins'))
+
 
 app.listen(config.port, () => {
     console.log("Listening on "+config.port)
