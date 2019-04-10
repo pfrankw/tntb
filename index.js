@@ -54,6 +54,6 @@ console.log("Loading plugins")
 loadPlugins(app, config, path.join(__dirname, 'plugins'))
 
 
-app.listen(config.bind, () => {
+app.listen(config.port, config.bind_address, () => {
     console.log("Listening on "+config.port)
 })
