@@ -78,11 +78,13 @@ async function dlTNT(esclient, config) {
       return
     }
 
-    if (!r || !r.hits || !r.hits.total)
+    if (!r || !r.hits || !r.hits.total) {
+      myerror("Can't obtain not parsed list")
       return
+    }
 
     for (i in r.hits.hits) {
-      
+
       let doc = r.hits.hits[i]
 
       mylog('Trying to fetch', doc._id, doc._source.tlink)
