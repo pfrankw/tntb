@@ -52,8 +52,9 @@ async function dlTNT(esclient, config) {
     return
   }
 
+  mylog("not parsed count", count.count)
   from=0
-  while (from<count) {
+  while (from<count.count) {
 
     try {
       r = await esclient.search({
