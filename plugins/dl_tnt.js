@@ -97,9 +97,12 @@ async function dlTNT(esclient, config) {
         continue
       }
 
-      let pt = parseTorrent(tbuf)
-      if (!pt) {
-        myerror('Cant parse torrent', doc._id, doc._source.tlink)
+      let pt
+      
+      try {
+        pt = parseTorrent(tbuf)
+      } catch (e) {
+        myerror('Cant parse torrent', doc._id, doc._source.tlink, e)
         continue
       }
 
