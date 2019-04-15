@@ -152,6 +152,7 @@ async function updateDB(es, es_index, parsed) {
     if (r)
       return false
 
+    doc.source = 'tntvillage'
     try {
       await client.index({
         index: es_index,
